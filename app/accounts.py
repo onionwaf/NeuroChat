@@ -85,7 +85,6 @@ class BotWorker:
         self.starting = False
 
     async def _ensure_client(self):
-        # make sure schema has new columns
         try:
             db.migrate_chat_state()
             db.migrate_schema()
@@ -134,7 +133,6 @@ class BotWorker:
             before_max = int(float(db.get_acc_setting(self.phone, "human_before_send_max_ms", db.get_setting("human_before_send_max_ms", 400)) or "400"))
             keep_typing_until_send = int(db.get_acc_setting(self.phone, "human_keep_typing_until_send", db.get_setting("human_keep_typing_until_send", 1)) or "1")
 
-            # Legacy / additional params
             human_mark_read_policy = (db.get_acc_setting(self.phone, "human_mark_read_policy", db.get_setting("human_mark_read_policy", "on_typing")) or "on_typing").strip()
             human_quiet_hours = (db.get_acc_setting(self.phone, "human_quiet_hours", db.get_setting("human_quiet_hours", )) or "").strip()
             human_limit_per_minute = int(float(db.get_acc_setting(self.phone, "human_limit_per_minute", db.get_setting("human_limit_per_minute", 0)) or "0"))
@@ -166,7 +164,6 @@ class BotWorker:
                                 if t1 <= now <= t2:
                                     return True
                             else:
-                                # overnight interval, e.g. 23:00-08:00
                                 if now >= t1 or now <= t2:
                                     return True
                         except Exception:
@@ -220,17 +217,14 @@ class BotWorker:
             prompt = prompts_mod.build_prompt(style, custom, text)
 
             limits = db.get_account_limits(self.phone)
-            # safety gate
             if limits.get('safe_mode',1):
                 db.log('INFO','safety', f'acc={self.phone} safe_mode=ON', self.phone, chat_id, chat_title)
                 db.set_chat_diag(self.phone, chat_id, 'safe_mode=ON')
                 return
-            # per-hour cap
             since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(sep=' ')
             if db.count_replies_since(self.phone, since) >= int(limits.get('replies_per_hour',8)):
                 db.log('INFO','safety', f'acc={self.phone} hourly cap reached', self.phone, chat_id, chat_title)
                 return
-            # per-chat gap
             last = db.get_last_reply(self.phone, chat_id)
             if last is not None:
                 gap_ms = (datetime.now(timezone.utc)-last).total_seconds()*1000.0
@@ -240,14 +234,12 @@ class BotWorker:
 
             db.log("INFO", "bot", f"Ask Mistral: {text}", self.phone, chat_id, chat_title)
             
-            # Read policy: immediate/on_typing/before_send
             async def _mark_read():
                 try:
                     await self.client.send_read_acknowledge(chat, max_id=msg.id)
                 except Exception:
                     pass
 
-            # Optional think delay
             async def _sleep_ms(ms):
                 import asyncio, random
                 if ms <= 0: 
@@ -265,7 +257,6 @@ class BotWorker:
 
             await _sleep_ms(reaction_delay_ms)
 
-            # Start typing indicator and generate reply concurrently
             reply_text = None
             import asyncio
             async def _gen():
@@ -279,9 +270,7 @@ class BotWorker:
                         await _mark_read()
                     await _sleep_ms(human_think_ms)
                     await _gen()
-                    # simulate human typing time based on cps
                     est_ms = int(max(0, len(reply_text)) / max(0.1, typing_cps) * 1000)
-                    # add per-paragraph pauses
                     par_count = reply_text.count("\\n\\n")
                     est_ms += par_count * between_par_ms
                     await _sleep_ms(est_ms)
@@ -299,7 +288,6 @@ class BotWorker:
             reply = reply_text
 
 
-            # Append CTA: prefer per-account, else global
             acc_cta_enabled, acc_cta_text = db.get_account_cta(self.phone)
             if acc_cta_enabled and (acc_cta_text or "").strip():
                 reply = f"{reply}\n\n{acc_cta_text.strip()}"
@@ -309,13 +297,9 @@ class BotWorker:
                     reply = f"{reply}\n\n{cta}"
 
             
-            # Per-minute limit (rough): check last replies within 60s via DB counter if available
             try:
                 if human_limit_per_minute and human_limit_per_minute > 0:
                     since = (datetime.now(timezone.utc) - timedelta(seconds=60)).isoformat(sep=' ')
-                    # reuse per-hour counter if exists; approximate by hour but with 60s window
-                    # We'll count via logs of last replies if available, else skip
-                    # Using db.count_replies_since already exists (per hour); reuse it
                     cnt_min = db.count_replies_since(self.phone, since)
                     if cnt_min >= max(1, human_limit_per_minute):
                         db.log('INFO','safety', f'acc={self.phone} per-minute cap reached', self.phone, chat_id, chat_title)
@@ -351,7 +335,6 @@ class BotWorker:
             db.log("INFO", "runner", f"Stopped account {self.phone}")
 
     def start(self):
-        # Prevent double start: if thread alive or starting, ignore
         if self.running or self.starting or (self.thread and getattr(self.thread, 'is_alive', lambda: False)()):
             return
         if not self.loop or self.loop.is_closed():
@@ -360,14 +343,12 @@ class BotWorker:
         import threading
         def run():
             asyncio.set_event_loop(self.loop)
-            # launch coroutine as task; keep loop running
             self.loop.create_task(self._start())
             try:
                 self.loop.run_forever()
             except Exception:
                 logging.exception('worker loop crashed')
             finally:
-                # shutdown loop gracefully
                 for t in asyncio.all_tasks(self.loop):
                     t.cancel()
                 with contextlib.suppress(Exception):
@@ -393,7 +374,6 @@ class BotWorker:
                 fut.result(timeout=10)
             except Exception as e:
                 logging.debug('disconnect wait failed: %s', e)
-            # stop the loop when safe
             self.loop.call_soon_threadsafe(self.loop.stop)
         if self.thread:
             try:
@@ -476,7 +456,6 @@ class AccountsManager:
                     if invite: return await join_by_invite(w.client, invite)
                     return False
                 
-                # --- Humanized join delay (global settings) ---
                 try:
                     delay_enabled = db.get_setting("join_delay_enabled", "1") == "1"
                     dmin = float(db.get_setting("join_delay_min_sec", "2.0"))
@@ -509,7 +488,6 @@ class AccountsManager:
                 w.stop()
             except Exception:
                 pass
-        # join threads
         for w in list(self.workers.values()):
             th = getattr(w, "thread", None)
             if th:
