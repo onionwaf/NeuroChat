@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import sys, os, logging, argparse
 sys.path.append(os.path.join(os.path.dirname(__file__), "app"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "gui"))
@@ -32,7 +31,6 @@ def main():
         except Exception as e:
             print("Не удалось удалить БД:", e)
 
-    # 1) Инициализируем БД
     try:
         if hasattr(db, "init_db"):
             db.init_db()
