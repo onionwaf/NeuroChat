@@ -48,7 +48,6 @@ def main():
     except Exception as e:
         logging.error("DB init failed: %s", e)
 
-    # 2) Теперь настраиваем логирование (может читать настройки из БД)
     setup_logging()
 
     logging.info("Starting GUI...")
