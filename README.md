@@ -87,13 +87,19 @@ Tabs in the main window:
 
 ---
 
+## ⬇️ Download (Windows)
+
+You don’t need to install Python to use the app.  
+A ready-to-use **Windows .exe version** is available in the [Releases section](../../releases).  
+Just download the `.exe` file and run it.
+
 ## 🔑 Get your Mistral API key
 
 To use AI, you need a **Mistral API key**:  
 - Register here: [https://console.mistral.ai/](https://console.mistral.ai/)  
 - Go to **API Keys** section.  
 - Create a key and copy it.  
-- Paste into `.env` file: `MISTRAL_API_KEY=...`
+- Paste this api in settings "AI mistral`
 
 ---
 
@@ -147,11 +153,17 @@ You may use, modify, and share the code, but **commercial use is forbidden**.
    python run.py
    ```
 
+## ⬇️ Скачать (Windows)
+
+Не нужно устанавливать Python, чтобы пользоваться программой.  
+Готовая **Windows .exe версия** доступна в разделе [Releases](../../releases).  
+Просто скачайте `.exe` файл и запустите его.
+
 ## 🔑 Где взять Mistral API ключ?
 - Зарегистрируйтесь на [https://console.mistral.ai/](https://console.mistral.ai/)  
 - Перейдите в раздел **API Keys**.  
 - Создайте ключ и скопируйте его.  
-- Вставьте в `.env` файл (`MISTRAL_API_KEY=...`).  
+- Вставьте его в программе в разделе "AI mistral".  
 
 ## ℹ️ Обо мне
 ⚠️ Я **не программист**.  
