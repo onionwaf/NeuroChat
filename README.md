@@ -1,131 +1,163 @@
-# NeuroChat (working title)
+# NeuroChattingBot
 
-Desktop AI chat client with a PyQt6 GUI. Integrates Mistral API and optional Telegram via Telethon.
+Desktop application for automating Telegram communication and promotion.  
+It connects **multiple Telegram accounts** with **Mistral AI**,  
+so you can automatically reply in chats and promote channels, groups, and projects.
 
 [🇷🇺 Читать на русском](#на-русском)
 
 ---
 
-## Features
-- Multi-tab PyQt6 GUI (Chats, AI, Accounts, Settings, Logs, ...)
-- Mistral API integration
-- Telegram via Telethon
-- Theming (dark.qss)
-- Logging, filters, prompts, triggers
+## 🤔 Who is this app for?
 
-## Getting Started
+This app will be useful for:
+- **SMM specialists** — to promote brands on Telegram.
+- **Marketers** — to manage multiple accounts at once.
+- **Channel and group admins** — to automate communication with subscribers.
+- **Promotion managers** — to quickly find new chats and interact there with AI replies.
+- **Anyone** — who wants to save time and simplify Telegram work.
 
-### Prerequisites
-- Python 3.11+
-- Windows/macOS/Linux
+---
 
-### Setup
-```bash
-python -m venv .venv
-# Windows PowerShell:
-.venv\Scripts\Activate.ps1
-# macOS/Linux:
-# source .venv/bin/activate
+## ✨ Features
 
-pip install --upgrade pip
-pip install -r requirements.txt
+### 🔑 Multi-account
+- Connect multiple Telegram accounts.  
+- Login via phone number (confirmation code).  
+- Or import `.session` files.  
+- Turn accounts on/off anytime.  
 
-# Configure secrets
-cp .env.example .env
-# Fill your keys: MISTRAL_API_KEY, TELEGRAM_API_ID, TELEGRAM_API_HASH, etc.
+### 🔍 Chat search
+- Find Telegram chats by keywords.  
+- Join chats directly from the app.  
+- Manage a list of active chats.  
 
-python run.py
-```
+### 🛡 Message filters
+- Reply only to “valid” messages:  
+  - longer than a given number of words;  
+  - in the correct language (RU/EN);  
+  - unique (anti-spam).  
+- Enable/disable filters in settings.  
 
-## Configuration
-Environment variables are loaded from `.env` (via `python-dotenv`).  
-Do **NOT** commit real secrets.  
-See `.env.example` for supported variables.
+### ⚡ Triggers
+- Create trigger words/phrases (e.g., *buy*, *support*, *help*).  
+- If a message matches → bot replies.  
+- Separate triggers for each chat.  
 
-## Build (Windows EXE)
-We use PyInstaller.
+### 🎭 Reply styles (prompts)
+- Choose how the bot talks:  
+  - friendly,  
+  - expert,  
+  - humorous,  
+  - or your custom style.  
 
-Quick build:
-```powershell
-pip install pyinstaller
-pyinstaller run.py --name NeuroChat --windowed --onefile ^
-  --add-data "theme/dark.qss;theme"
-```
-The EXE will be in `dist/`.
+### 🤖 Mistral AI
+- Uses the **official Mistral API**.  
+- AI generates a reply in the chosen style.  
+- Configurable timeout (e.g., max 1 reply/minute).  
 
-Tips:
-- Add extra resource folders with `--add-data`.
-- If dynamic imports are missed, use `.spec` (see `neurochat.spec`).
+### 💬 Auto replies
+- Replies are sent instantly in chats.  
+- Each account can work in its own chats.  
+- Logging of all actions (what and where was sent).  
 
-## CI: GitHub Actions Release
-On tag push like `v1.0.0`, CI builds the Windows exe and attaches it to the GitHub Release.  
-Workflow file: `.github/workflows/release.yml`.
+### 🖥 User-friendly interface (PyQt6)
+Tabs in the main window:  
+- **Accounts** — add/import/remove, turn on/off.  
+- **Chats** — search, join, set triggers.  
+- **AI (Mistral)** — enter API key, choose style.  
+- **Settings** — filters, timeouts, auto-start.  
+- **Logs** — real-time activity.  
 
-## License
-This repository uses **Non-Commercial Open License 1.0 (NCOL-1.0)** — you can use, modify, and distribute the source, but **commercial use is not permitted**.  
-See [LICENSE](LICENSE) for full text.
+---
+
+## 🚀 Installation
+
+1. Install Python **3.11+**.  
+2. Clone the project and open the folder.  
+3. Install dependencies:  
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Copy `.env.example` → `.env` and add your Mistral API key.  
+5. Run the app:  
+   ```bash
+   python run.py
+   ```
+
+---
+
+## 🔑 Get your Mistral API key
+
+To use AI, you need a **Mistral API key**:  
+- Register here: [https://console.mistral.ai/](https://console.mistral.ai/)  
+- Go to **API Keys** section.  
+- Create a key and copy it.  
+- Paste into `.env` file: `MISTRAL_API_KEY=...`
+
+---
+
+## ℹ️ About me
+⚠️ I am **not a professional programmer**.  
+This app was created with the help of **ChatGPT-5**.  
+You can use this project to **promote your own projects on Telegram**.  
+
+---
+
+## 📜 License
+License: **Non-Commercial Open License 1.0 (NCOL-1.0)**.  
+You may use, modify, and share the code, but **commercial use is forbidden**.  
 
 ---
 
 # На русском
 
 ## 📌 Описание
-NeuroChat — это десктопный чат-клиент с графическим интерфейсом на PyQt6.  
-Поддерживает работу с **Mistral API** и (опционально) **Telegram через Telethon**.  
+**NeuroChattingBot** — это десктопное приложение для автоматизации общения и продвижения в Telegram.  
+Оно соединяет **несколько Telegram-аккаунтов** и **искусственный интеллект Mistral AI**,  
+чтобы автоматически отвечать в чатах и помогать продвигать каналы, группы и проекты.  
 
-## 🚀 Возможности
-- Многооконный интерфейс (Чаты, AI, Аккаунты, Настройки, Логи и т. д.)
-- Интеграция с Mistral API
-- Поддержка Telegram (через Telethon)
-- Темы оформления (например, `dark.qss`)
-- Логирование, фильтры, промпты, триггеры
+## 🤔 Кому пригодится?
+- **SMM-специалистам** — для продвижения брендов.  
+- **Маркетологам** — для работы с несколькими аккаунтами.  
+- **Админам каналов и чатов** — для общения с подписчиками.  
+- **Продвиженцам** — для поиска новых чатов и ответов через ИИ.  
+- **Всем** — кто хочет упростить работу в Telegram.  
 
-## 🛠 Установка и запуск
-1. Установи Python 3.11+.  
-2. Склонируй репозиторий и перейди в папку:  
+## ✨ Основные возможности
+- 🔑 Подключение нескольких аккаунтов (вход по номеру или импорт `.session`).  
+- 🔍 Поиск чатов по ключевым словам, вступление прямо из программы.  
+- 🛡 Фильтры сообщений: длина, язык, уникальность.  
+- ⚡ Триггеры — слова/фразы, при которых бот отвечает.  
+- 🎭 Стили ответов: дружеский, экспертный, шуточный, кастомный.  
+- 🤖 Подключение к **Mistral API** для генерации ответов.  
+- 💬 Автоматические ответы от разных аккаунтов, ведение логов.  
+- 🖥 Удобный интерфейс на PyQt6 с вкладками (аккаунты, чаты, AI, настройки, логи).  
+
+## 🚀 Установка и запуск
+1. Установите Python 3.11+.  
+2. Склонируйте проект и перейдите в папку.  
+3. Установите зависимости:  
    ```bash
-   git clone https://github.com/<username>/neurochat.git
-   cd neurochat
-   ```
-3. Создай виртуальное окружение и установи зависимости:  
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\Activate.ps1  # Windows
-   # source .venv/bin/activate  # Linux/macOS
-
    pip install -r requirements.txt
    ```
-4. Скопируй `.env.example` → `.env` и пропиши свои ключи (Mistral, Telegram).  
-5. Запусти приложение:  
+4. Скопируйте `.env.example` → `.env` и вставьте свой ключ Mistral API.  
+5. Запустите:  
    ```bash
    python run.py
    ```
 
-## ⚙️ Конфигурация
-Все настройки хранятся в `.env` (через библиотеку `python-dotenv`).  
-Файл `.env` никогда не нужно коммитить!  
-Смотри `.env.example` для примера.
+## 🔑 Где взять Mistral API ключ?
+- Зарегистрируйтесь на [https://console.mistral.ai/](https://console.mistral.ai/)  
+- Перейдите в раздел **API Keys**.  
+- Создайте ключ и скопируйте его.  
+- Вставьте в `.env` файл (`MISTRAL_API_KEY=...`).  
 
-## 📦 Сборка в EXE (Windows)
-Используется **PyInstaller**:  
-```powershell
-pip install pyinstaller
-pyinstaller run.py --name NeuroChat --windowed --onefile ^
-  --add-data "theme/dark.qss;theme"
-```
-Готовый exe появится в `dist/`.
-
-## 🤖 Автосборка через GitHub Actions
-Если создать тег (например, `v1.0.0`) и отправить его на GitHub:  
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-→ автоматически соберётся `NeuroChat.exe` и прикрепится к релизу.  
-
-Файл workflow: `.github/workflows/release.yml`.
+## ℹ️ Обо мне
+⚠️ Я **не программист**.  
+Это приложение сделано с помощью **ChatGPT-5**.  
+Вы можете использовать его для **продвижения своих проектов в Telegram**.  
 
 ## 📜 Лицензия
 Лицензия: **Non-Commercial Open License 1.0 (NCOL-1.0)**.  
-Код можно использовать, изменять и распространять, но **запрещено коммерческое использование**.  
-Текст лицензии смотри в [LICENSE](LICENSE).
+Код можно использовать, изменять и распространять, но **нельзя использовать в коммерческих целях**.  
