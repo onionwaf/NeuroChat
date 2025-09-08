@@ -1,6 +1,10 @@
-# NeuroChat
+# NeuroChat (working title)
 
 Desktop AI chat client with a PyQt6 GUI. Integrates Mistral API and optional Telegram via Telethon.
+
+[🇷🇺 Читать на русском](#на-русском)
+
+---
 
 ## Features
 - Multi-tab PyQt6 GUI (Chats, AI, Accounts, Settings, Logs, ...)
@@ -34,8 +38,9 @@ python run.py
 ```
 
 ## Configuration
-Environment variables are loaded from `.env` (via `python-dotenv`). Do **NOT** commit real secrets.
-See `.env.example` for the list of supported variables.
+Environment variables are loaded from `.env` (via `python-dotenv`).  
+Do **NOT** commit real secrets.  
+See `.env.example` for supported variables.
 
 ## Build (Windows EXE)
 We use PyInstaller.
@@ -49,14 +54,78 @@ pyinstaller run.py --name NeuroChat --windowed --onefile ^
 The EXE will be in `dist/`.
 
 Tips:
-- Add any extra resource folders with additional `--add-data` entries.
-- If dynamic imports are missed, use a `.spec` (see `neurochat.spec`).
+- Add extra resource folders with `--add-data`.
+- If dynamic imports are missed, use `.spec` (see `neurochat.spec`).
 
 ## CI: GitHub Actions Release
-On tag push like `v1.0.0`, CI builds the Windows exe and attaches it to the GitHub Release.
+On tag push like `v1.0.0`, CI builds the Windows exe and attaches it to the GitHub Release.  
 Workflow file: `.github/workflows/release.yml`.
 
 ## License
-This repository uses **Non‑Commercial Open License 1.0 (NCOL‑1.0)** — you can use, modify, and distribute the source,
-but **commercial use is not permitted**. See [LICENSE](LICENSE) for full text.
-If you prefer a permissive OSI license, consider MIT/Apache‑2.0 instead.
+This repository uses **Non-Commercial Open License 1.0 (NCOL-1.0)** — you can use, modify, and distribute the source, but **commercial use is not permitted**.  
+See [LICENSE](LICENSE) for full text.
+
+---
+
+# На русском
+
+## 📌 Описание
+NeuroChat — это десктопный чат-клиент с графическим интерфейсом на PyQt6.  
+Поддерживает работу с **Mistral API** и (опционально) **Telegram через Telethon**.  
+
+## 🚀 Возможности
+- Многооконный интерфейс (Чаты, AI, Аккаунты, Настройки, Логи и т. д.)
+- Интеграция с Mistral API
+- Поддержка Telegram (через Telethon)
+- Темы оформления (например, `dark.qss`)
+- Логирование, фильтры, промпты, триггеры
+
+## 🛠 Установка и запуск
+1. Установи Python 3.11+.  
+2. Склонируй репозиторий и перейди в папку:  
+   ```bash
+   git clone https://github.com/<username>/neurochat.git
+   cd neurochat
+   ```
+3. Создай виртуальное окружение и установи зависимости:  
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\Activate.ps1  # Windows
+   # source .venv/bin/activate  # Linux/macOS
+
+   pip install -r requirements.txt
+   ```
+4. Скопируй `.env.example` → `.env` и пропиши свои ключи (Mistral, Telegram).  
+5. Запусти приложение:  
+   ```bash
+   python run.py
+   ```
+
+## ⚙️ Конфигурация
+Все настройки хранятся в `.env` (через библиотеку `python-dotenv`).  
+Файл `.env` никогда не нужно коммитить!  
+Смотри `.env.example` для примера.
+
+## 📦 Сборка в EXE (Windows)
+Используется **PyInstaller**:  
+```powershell
+pip install pyinstaller
+pyinstaller run.py --name NeuroChat --windowed --onefile ^
+  --add-data "theme/dark.qss;theme"
+```
+Готовый exe появится в `dist/`.
+
+## 🤖 Автосборка через GitHub Actions
+Если создать тег (например, `v1.0.0`) и отправить его на GitHub:  
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+→ автоматически соберётся `NeuroChat.exe` и прикрепится к релизу.  
+
+Файл workflow: `.github/workflows/release.yml`.
+
+## 📜 Лицензия
+Лицензия: **Non-Commercial Open License 1.0 (NCOL-1.0)**.  
+Код можно использовать, изменять и распространять, но **запрещено коммерческое использование**.  
+Текст лицензии смотри в [LICENSE](LICENSE).
