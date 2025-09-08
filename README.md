@@ -1,7 +1,6 @@
-# NeuroChat (working title)
+# NeuroChat
 
 Desktop AI chat client with a PyQt6 GUI. Integrates Mistral API and optional Telegram via Telethon.
-> Rename the project to whatever you like (e.g., `neurochat`, `mistral-chat`, `chatdesk`).
 
 ## Features
 - Multi-tab PyQt6 GUI (Chats, AI, Accounts, Settings, Logs, ...)
